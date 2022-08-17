@@ -221,12 +221,11 @@ func prepareConsole(input windows.Handle) (reset func() error, err error) {
 
 	fmt.Println("")
 	return func() error {
-		fmt.Println("call close")
-		fmt.Println("originalMode:", originalMode)
-		err := windows.SetConsoleMode(input, originalMode)
-		if err != nil {
-			return fmt.Errorf("reset console mode: %w", err)
-		}
+		panic("originalMode:" + string(originalMode))
+		//err := windows.SetConsoleMode(input, originalMode)
+		//if err != nil {
+		//	return fmt.Errorf("reset console mode: %w", err)
+		//}
 
 		return nil
 	}, nil
