@@ -117,12 +117,12 @@ func (r *winCancelReader) Cancel() bool {
 
 func (r *winCancelReader) Close() error {
 	err := windows.CloseHandle(r.cancelEvent)
-	panic("close")
+	fmt.Println("close 1")
 	if err != nil {
 		return fmt.Errorf("closing cancel event handle: %w", err)
 	}
 
-	panic("reset close")
+	fmt.Println("reset close 2")
 	err = r.resetConsole()
 	if err != nil {
 		return err
@@ -195,7 +195,7 @@ func prepareConsole(input windows.Handle) (reset func() error, err error) {
 	if err != nil {
 		return nil, fmt.Errorf("get console mode: %w", err)
 	}
-	fmt.Println("originalMode:", originalMode)
+	fmt.Println("init originalMode:", originalMode)
 
 	var newMode uint32
 	newMode &^= windows.ENABLE_ECHO_INPUT
@@ -223,11 +223,11 @@ func prepareConsole(input windows.Handle) (reset func() error, err error) {
 
 	fmt.Println("")
 	return func() error {
-		panic("originalMode:" + string(originalMode))
-		//err := windows.SetConsoleMode(input, originalMode)
-		//if err != nil {
-		//	return fmt.Errorf("reset console mode: %w", err)
-		//}
+		fmt.Println("rest called originalMode:", originalMode)
+		err := windows.SetConsoleMode(input, originalMode)
+		if err != nil {
+			return fmt.Errorf("reset console mode: %w", err)
+		}
 
 		return nil
 	}, nil
