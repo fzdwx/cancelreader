@@ -193,6 +193,7 @@ func prepareConsole(input windows.Handle) (reset func() error, err error) {
 	if err != nil {
 		return nil, fmt.Errorf("get console mode: %w", err)
 	}
+	fmt.Println("originalMode:", originalMode)
 
 	var newMode uint32
 	newMode &^= windows.ENABLE_ECHO_INPUT
@@ -218,7 +219,10 @@ func prepareConsole(input windows.Handle) (reset func() error, err error) {
 		return nil, fmt.Errorf("set console mode: %w", err)
 	}
 
+	fmt.Println("")
 	return func() error {
+		fmt.Println("call close")
+		fmt.Println("originalMode:", originalMode)
 		err := windows.SetConsoleMode(input, originalMode)
 		if err != nil {
 			return fmt.Errorf("reset console mode: %w", err)
