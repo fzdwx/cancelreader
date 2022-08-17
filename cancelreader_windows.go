@@ -187,12 +187,12 @@ func (r *winCancelReader) readAsync(data []byte) (int, error) {
 }
 
 func prepareConsole(input windows.Handle) (reset func() error, err error) {
-	var originalMode uint32
+	var originalMode uint32 = 503 // fix https://github.com/fzdwx/infinite/issues/29
 
-	err = windows.GetConsoleMode(input, &originalMode)
-	if err != nil {
-		return nil, fmt.Errorf("get console mode: %w", err)
-	}
+	//err = windows.GetConsoleMode(input, &originalMode)
+	//if err != nil {
+	//	return nil, fmt.Errorf("get console mode: %w", err)
+	//}
 
 	var newMode uint32
 	newMode &^= windows.ENABLE_ECHO_INPUT
