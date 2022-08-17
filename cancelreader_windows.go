@@ -117,10 +117,12 @@ func (r *winCancelReader) Cancel() bool {
 
 func (r *winCancelReader) Close() error {
 	err := windows.CloseHandle(r.cancelEvent)
+	panic("close")
 	if err != nil {
 		return fmt.Errorf("closing cancel event handle: %w", err)
 	}
 
+	panic("reset close")
 	err = r.resetConsole()
 	if err != nil {
 		return err
